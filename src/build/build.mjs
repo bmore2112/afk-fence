@@ -32,8 +32,17 @@ async function loadAreas() {
 async function emit(path, html) {
   const file = path.endsWith(".html") ? join(OUT, path) : join(OUT, path, "index.html");
   await mkdir(dirname(file), { recursive: true });
-  await writeFile(file, html, "utf8");
+  await writeFile(file, withBase(html), "utf8");
   return path;
+}
+
+const BASE = (process.env.BASE_PATH || "").replace(/\/$/, "");
+
+function withBase(html) {
+  if (!BASE) return html;
+  return html
+    .replace(/(\s(?:href|src|srcset|action|data-lightbox)=")\/(?!\/)/g, `$1${BASE}/`)
+    .replace('<html lang="en" class="no-js">', `<html lang="en" class="no-js" data-base="${BASE}">`);
 }
 
 function sitemap(paths) {

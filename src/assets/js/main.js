@@ -2,6 +2,7 @@
   "use strict";
 
   var EMAIL = "afkfence@gmail.com";
+  var BASE = document.documentElement.getAttribute("data-base") || "";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -134,7 +135,7 @@
       for (var i = 0; i < count; i++) bars += "<b style=\"height:" + h + "%;background:" + (colors[data.material] || "#f3a712") + "\"></b>";
       viz.innerHTML = bars;
       var qs = new URLSearchParams(data).toString();
-      link.href = "/contact/?" + qs + "#quote";
+      link.href = BASE + "/contact/?" + qs + "#quote";
     };
     form.addEventListener("input", render);
     form.addEventListener("change", render);
@@ -235,7 +236,7 @@
         .then(function (r) {
           if (r.body && r.body.ok) {
             form.reset();
-            window.location.href = "/thank-you/";
+            window.location.href = BASE + "/thank-you/";
             return;
           }
           throw new Error((r.body && r.body.error) || "send_failed");
